@@ -1,0 +1,13 @@
+{
+    "version": 2,
+    "builds": [
+      { "src": "api/*.js", "use": "@vercel/node" }
+    ],
+    "routes": [
+      { "src": "/api/get-html", "dest": "/api/get-html.js" },
+      { "src": "/api/get-cities", "dest": "/api/get-cities.js" },
+      { "src": "/api/get-regioes", "dest": "/api/get-regioes.js" },
+      { "src": "/api/get-theaters", "dest": "/api/get-theaters.js" }
+    ]
+  }
+  
