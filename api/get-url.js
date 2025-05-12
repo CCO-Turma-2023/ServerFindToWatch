@@ -10,10 +10,28 @@ module.exports = async (req, res) => {
       return res.status(200).end();
     }
 
-    const {code} = req.query;
+    let {code} = req.query;
+
+    console.log("Code 1 ",code)
+
+    const flag = code[code.length - 1]
+
+    console.log("Code 2 ",flag)
+
+    code = code.slice(0,-1)
+
+    console.log("Code 3 ",code)
+
+    let url
+
+    if(flag === '0' || flag === "0"){
+      url = `https://www.themoviedb.org/tv/${code}/watch?locale=BR`
+    }else{
+      url = `https://www.themoviedb.org/movie/${code}/watch?locale=BR`
+    }
 
     try {
-      const response = await axios.get(`https://www.themoviedb.org/tv/${code}/watch?locale=BR`);
+      const response = await axios.get(url);
       const html = response.data;
       const $ = cheerio.load(html);
 
