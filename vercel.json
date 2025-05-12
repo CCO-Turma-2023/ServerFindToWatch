@@ -1,16 +1,14 @@
 {
-    "version": 2,
-    "builds": [
-      { "src": "api/*.js", "use": "@vercel/node" }
-    ],
-    "routes": [
-      { "src": "/api/get-html", "dest": "/api/get-html.js" },
-      { "src": "/api/get-cities", "dest": "/api/get-cities.js" },
-      { "src": "/api/get-regioes", "dest": "/api/get-regioes.js" },
-      { "src": "/api/get-theaters", "dest": "/api/get-theaters.js" },
-      { "src": "/api/get-theaters-info", "dest": "/api/get-theaters-info.js" },
-      { "src": "/api/get-films", "dest": "/api/get-films.js" },
-      { "src": "/api/get-url", "dest": "/api/get-url.js" }
-    ]
-  }
-  
+  "version": 2,
+  "builds": [{ "src": "api/*.js", "use": "@vercel/node" }],
+  "routes": [
+    { "src": "/api/get-html", "dest": "/api/get-html.js" },
+    { "src": "/api/get-cities", "dest": "/api/get-cities.js" },
+    { "src": "/api/get-regioes", "dest": "/api/get-regioes.js" },
+    { "src": "/api/get-theaters", "dest": "/api/get-theaters.js" },
+    { "src": "/api/get-theaters-info", "dest": "/api/get-theaters-info.js" },
+    { "src": "/api/get-films", "dest": "/api/get-films.js" },
+    { "src": "/api/get-url", "dest": "/api/get-url.js" },
+    { "src": "/api/get-cine-catalog", "dest": "/api/get-cine-catalog.js" }
+  ]
+}
