@@ -12,15 +12,9 @@ module.exports = async (req, res) => {
 
     let {code} = req.query;
 
-    console.log("Code 1 ",code)
-
     const flag = code[code.length - 1]
 
-    console.log("Code 2 ",flag)
-
     code = code.slice(0,-1)
-
-    console.log("Code 3 ",code)
 
     let url
 
