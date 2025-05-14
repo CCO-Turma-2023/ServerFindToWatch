@@ -24,7 +24,6 @@ module.exports = async (req, res) => {
 
       const html = response.data;
       const $ = cheerio.load(html);
-      let encontrouFilmes = false;
 
       $("ul li.mdl").each((_, li) => {
         const $li = $(li);
@@ -39,17 +38,13 @@ module.exports = async (req, res) => {
           const sessoesText = $li.find("a.button").text().trim();
           if (/\(\d+\)/.test(sessoesText) && title !== "") {
             filmesComSessoes.push({title: title, overview: overview});
-            encontrouFilmes = true;
           }
         } else {
           if (title !== "") {
             filmesComSessoes.push({title: title, overview: overview});
-            encontrouFilmes = true;
           }
         }
       });
-
-      return encontrouFilmes;
     };
 
     if (code === 0) {
@@ -60,13 +55,9 @@ module.exports = async (req, res) => {
             await processPage(url, false);
         }
     } else if (code === 2) {
-      let page = 1;
-      let encontrouFilmes = true;
-
-      while (encontrouFilmes) {
+      for (let page = 1; page <= 4; page++) {
         const url = `https://www.adorocinema.com/filmes/numero-cinemas/?page=${page}`;
-        encontrouFilmes = await processPage(url, true);
-        page++;
+        await processPage(url, true);
       }
     }
 
