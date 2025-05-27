@@ -36,6 +36,8 @@ module.exports = async (req, res) => {
         overview: movies.synopsis,
         poster_path: movies.poster.url,
         release_date: movies.data.productionYear,
+        showtimesDubbed: movies.data.showtimes.dubbed,
+        showtimesOriginal: movies.data.showtimes.original,
       };
     }
 
