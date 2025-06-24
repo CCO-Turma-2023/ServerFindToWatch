@@ -1,11 +1,13 @@
 const { Expo } = require('expo-server-sdk');
 const axios = require('axios');
-const { put } = require('@vercel/blob'); // Supondo que você esteja usando o Vercel Blob API
+const { put } = require('@vercel/blob');
 
 const urlTokens = "https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationTokens-7Kjlijm29kPsHluKLyrLuKLKlEeaEM.txt";
 
 module.exports = async (req, res) => {
-    const { token } = req.body;
+    const { token } = req.query.token;
+
+    console.log(token);
 
     if (!token || !Expo.isExpoPushToken(token)) 
     {
