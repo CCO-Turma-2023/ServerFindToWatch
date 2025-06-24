@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const expo = new Expo();
 
-const urlFilmes = "https://6rirgodfzktvd3ov.public.blob.vercel-storage.com/a-BS5g8m6J1gZVnQ9pEX5fniGRwQmOzb.txt";
+const urlFilmes = "https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationF2W-Go6dFm4aRQajAUAMRcaFShPWt62bi4.txt";
 
 
 async function salvarJson(nomeArquivo, objetoJson) {
@@ -37,7 +37,9 @@ async function buscarFilmes() {
 
 function filmesMudaram(novos, antigos) {
   if (!antigos || novos.length !== antigos.length) return true;
-  for (let i = 0; i < novos.length; i++) {
+
+  for (let i = 0; i < novos.length; i++) 
+  {
     if (novos[i].id !== antigos[i].id)
     {
       console.log(novos[i].id, antigos[i].id);
@@ -68,8 +70,6 @@ async function enviarNotificacao(tokens) {
 module.exports = async (req, res) => {
   const filmesCache = await axios.get(urlFilmes, { responseType: 'json'} )
 
-  console.log('Dados recebidos:', filmesCache.data.filmes);
-
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -83,7 +83,7 @@ module.exports = async (req, res) => {
 
     if (filmesMudaram(filmes, filmesCache.data.filmes)) {
 
-      await salvarJson('a-BS5g8m6J1gZVnQ9pEX5fniGRwQmOzb.txt', { filmes });
+      await salvarJson('notificationF2W-Go6dFm4aRQajAUAMRcaFShPWt62bi4.txt', { filmes });
       
       console.log("Filmes Novos", filmes);
 
