@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
 
     const jsonString = JSON.stringify(tokens, null, 2);
 
-    await put("notificationTokens.txt", jsonString, {
+    await put("notificationTokens-7Kjlijm29kPsHluKLyrLuKLKlEeaEM.txt", jsonString, {
         access: 'public',
         contentType: 'application/json',
         allowOverwrite: true,
