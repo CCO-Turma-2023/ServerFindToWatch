@@ -27,8 +27,11 @@ module.exports = async (req, res) => {
     try {
         const response = await axios.get(urlTokens, { responseType: 'json' });
 
+        console.log(response.data);
+
         if (Array.isArray(response.data)) 
         {
+            console.log("Entrei aqui ein");
             existingTokens = response.data;
         }
     } catch (error) {
