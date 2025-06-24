@@ -8,6 +8,8 @@ const expo = new Expo();
 const urlMovies =
   "https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationF2W-T9CgICVM9EaMADOREZ1HnF3qD3olyn.txt";
 
+const urlTokens = "https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationTokens-7Kjlijm29kPsHluKLyrLuKLKlEeaEM.txt";
+
 async function saveJson(nomeArquivo, objetoJson) {
   const jsonString = JSON.stringify(objetoJson, null, 2);
 
@@ -151,9 +153,9 @@ module.exports = async (req, res) => {
 
       console.log("Filmes mudaram, enviando notificação...");
 
-      const tokens = ["ExponentPushToken[Zz_bkwJiz_O_FC33EjgUMY]"];
+      const response = await axios.get(urlTokens, { responseType: 'json' });
 
-      await enviarNotificacao(tokens);
+      await enviarNotificacao(response.data);
       return res.status(200).json({ message: "Notificação Enviada" });
     }
 
