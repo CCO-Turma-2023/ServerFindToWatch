@@ -8,6 +8,7 @@
     { "src": "/api/get-theaters", "dest": "/api/get-theaters.js" },
     { "src": "/api/get-theaters-info", "dest": "/api/get-theaters-info.js" },
     { "src": "/api/get-films", "dest": "/api/get-films.js" },
-    { "src": "/api/get-url", "dest": "/api/get-url.js" }
+    { "src": "/api/get-url", "dest": "/api/get-url.js" },
+    { "src": "/api/notification", "dest": "/api/notification.js"}
   ]
 }
