@@ -25,6 +25,8 @@ module.exports = async (req, res) => {
     }
 
     try {
+      console.log("URL gerada:", url);
+
       const response = await axios.get(url);
       const html = response.data;
       const $ = cheerio.load(html);
