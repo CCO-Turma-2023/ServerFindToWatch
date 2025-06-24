@@ -13,10 +13,9 @@ module.exports = async (req, res) => {
         return res.status(200).end();
     }
 
-    const { token } = req.query.token;
+    const { token } = req.query;
 
     console.log("isso ai", token);
-    console.log(req);
 
     if (!token || !Expo.isExpoPushToken(token)) 
     {
