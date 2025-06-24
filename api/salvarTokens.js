@@ -45,5 +45,5 @@ module.exports = async (req, res) => {
         allowOverwrite: true,
     });
 
-    res.status(200);
+    return res.status(200).send('Token Added');
 };
