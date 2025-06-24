@@ -31,18 +31,20 @@ module.exports = async (req, res) => {
 
         if (Array.isArray(response.data)) 
         {
-            console.log("Entrei aqui ein");
             existingTokens = response.data;
         }
     } catch (error) {
-        console.warn('Tokens antigos não encontrados ou inválidos. Será criado um novo arquivo.');
+        console.warn('Não foi possível carregar os tokens existentes:', error.message);
     }
 
+    // Evita duplicatas
     const tokens = Array.from(new Set([token, ...existingTokens]));
+
+    console.log(tokens);
 
     const jsonString = JSON.stringify(tokens, null, 2);
 
-    const { url } = await put("notificationTokens-7Kjlijm29kPsHluKLyrLuKLKlEeaEM.txt", jsonString, {
+    await put("notificationTokens.txt", jsonString, {
         access: 'public',
         contentType: 'application/json',
         allowOverwrite: true,
