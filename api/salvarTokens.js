@@ -2,7 +2,7 @@ const { Expo } = require('expo-server-sdk');
 const axios = require('axios');
 const { put } = require('@vercel/blob');
 
-const urlTokens = "https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationTokens-7Kjlijm29kPsHluKLyrLuKLKlEeaEM.txt";
+const urlTokens = `https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationTokens-glUgrqJeVzhYj2bKNbsgFSj6lFDb3l.txt?nocache=${Date.now()}`;
 
 module.exports = async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
 
     const jsonString = JSON.stringify(tokens, null, 2);
 
-    await put("notificationTokens-7Kjlijm29kPsHluKLyrLuKLKlEeaEM.txt", jsonString, {
+    await put("notificationTokens-glUgrqJeVzhYj2bKNbsgFSj6lFDb3l.txt", jsonString, {
         access: 'public',
         contentType: 'application/json',
         allowOverwrite: true,

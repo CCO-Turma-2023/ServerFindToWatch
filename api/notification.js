@@ -5,10 +5,9 @@ require("dotenv").config();
 
 const expo = new Expo();
 
-const urlMovies =
-  "https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationF2W-T9CgICVM9EaMADOREZ1HnF3qD3olyn.txt";
+const urlMovies = "https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationF2W-T9CgICVM9EaMADOREZ1HnF3qD3olyn.txt";
 
-const urlTokens = "https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationTokens-7Kjlijm29kPsHluKLyrLuKLKlEeaEM.txt";
+const urlTokens = `https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationTokens-glUgrqJeVzhYj2bKNbsgFSj6lFDb3l.txt?nocache=${Date.now()}`;
 
 async function saveJson(nomeArquivo, objetoJson) {
   const jsonString = JSON.stringify(objetoJson, null, 2);
@@ -49,15 +48,23 @@ async function searchTvShow() {
 }
 
 function trendingChanged(novos, antigos) {
-  if (!antigos || novos.length !== antigos.length) return true;
 
-  for (let i = 0; i < novos.length; i++) {
+  for (let i = 0; i < Math.min(novos.length, 3) && i < antigos.length; i++) {
     if (novos[i].id !== antigos[i].id) {
       console.log(novos[i].id, antigos[i].id);
-      return true;
+
+      if ( i % 2 === 0 )
+      {
+        return [true, novos[i].title];
+      }
+      else
+      {
+        return [true, novos[i].name];
+      }
+
     }
   }
-  return false;
+  return [false, ""];
 }
 
 const requestWatchProvides = async (id, type) => {
@@ -87,14 +94,14 @@ const requestWatchProvides = async (id, type) => {
   return hasProviders;
 };
 
-async function enviarNotificacao(tokens) {
+async function enviarNotificacao(tokens, ContentName) {
   if (!tokens || tokens.length === 0) return;
 
   const messages = tokens.map((token) => ({
     to: token,
     sound: "default",
-    title: "Filmes em alta atualizados!",
-    body: "Veja agora os novos filmes em destaque.",
+    title: "Já viu o que tá em alta?",
+    body: `Atualizamos a lista de filmes e séries. Bora assistir${ContentName ? ` ${ContentName}` : ""}?`,
   }));
 
   const chunks = expo.chunkPushNotifications(messages);
@@ -153,7 +160,11 @@ module.exports = async (req, res) => {
       if (filteredTvShowWithProviders[i]) result.push(filteredTvShowWithProviders[i]);
     }
 
-    if (trendingChanged(result, trendingCache.result)) {
+    const resultChange = trendingChanged(result, trendingCache.result);
+
+    console.log("ResultChange", resultChange);
+
+    if (resultChange[0] || true) {
       await saveJson("notificationF2W-T9CgICVM9EaMADOREZ1HnF3qD3olyn.txt", {
         result,
       });
@@ -165,7 +176,7 @@ module.exports = async (req, res) => {
 
       console.log(response.data);
 
-      await enviarNotificacao(response.data);
+      await enviarNotificacao(response.data, resultChange[1]);
       return res.status(200).json({ message: "Notificação Enviada" });
     }
 
