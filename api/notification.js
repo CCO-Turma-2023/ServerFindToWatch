@@ -7,7 +7,7 @@ const expo = new Expo();
 
 const urlMovies = "https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationF2W-T9CgICVM9EaMADOREZ1HnF3qD3olyn.txt";
 
-const urlTokens = `https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationTokens-glUgrqJeVzhYj2bKNbsgFSj6lFDb3l.txt?nocache=${Date.now()}`;
+const urlTokens = `https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationTokens-glUgrqJeVzhYj2bKNbsgFSj6lFDb3l-CySYlhMKotyF8F8uovSxwF1AWgEzYn.txt?nocache=${Date.now()}`;
 
 async function saveJson(nomeArquivo, objetoJson) {
   const jsonString = JSON.stringify(objetoJson, null, 2);
@@ -131,33 +131,15 @@ module.exports = async (req, res) => {
 
     const filteredOverviewMovies = movies.flat().filter((item) => item.overview?.trim() !== "");
     const filteredOverviewTvShow = tvShow.flat().filter((item) => item.overview?.trim() !== "");
+    
 
-    let filteredMoviesWithProviders = [];
-    let filteredTvShowWithProviders = [];
-
-    for (const item of filteredOverviewMovies) {
-      const type = "1";
-      const providers = await requestWatchProvides(item.id, type);
-      if (providers !== undefined) {
-        filteredMoviesWithProviders.push(item);
-      }
-    }
-
-    for (const item of filteredOverviewTvShow) {
-      const type = "0";
-      const providers = await requestWatchProvides(item.id, type);
-      if (providers !== undefined) {
-        filteredTvShowWithProviders.push(item);
-      }
-    }
-
-    const maxLength = Math.max(filteredMoviesWithProviders.length, filteredTvShowWithProviders.length);
+    const maxLength = Math.max(filteredOverviewMovies.length, filteredOverviewTvShow.length);
 
     let result = [];
 
     for (let i = 0; i < maxLength; i++) {
-      if (filteredMoviesWithProviders[i]) result.push(filteredMoviesWithProviders[i]);
-      if (filteredTvShowWithProviders[i]) result.push(filteredTvShowWithProviders[i]);
+      if (filteredOverviewMovies[i]) result.push(filteredOverviewMovies[i]);
+      if (filteredOverviewTvShow[i]) result.push(filteredOverviewTvShow[i]);
     }
 
     const resultChange = trendingChanged(result, trendingCache.result);
@@ -187,3 +169,4 @@ module.exports = async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 };
+
