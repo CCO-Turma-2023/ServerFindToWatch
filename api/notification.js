@@ -60,7 +60,7 @@ function trendingChanged(novos, antigos) {
   return false;
 }
 
-export const requestWatchProvides = async (id, type) => {
+const requestWatchProvides = async (id, type) => {
   let request;
 
   if (type === "1") {
@@ -104,7 +104,11 @@ async function enviarNotificacao(tokens) {
 }
 
 module.exports = async (req, res) => {
-  const trendingCache = await axios.get(urlMovies, { responseType: "json" });
+  const responseMovies = await axios.get(urlMovies, { responseType: "json" });
+
+  const trendingCache = responseMovies.data;
+
+  console.log("AQUI", trendingCache);
 
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -121,9 +125,12 @@ module.exports = async (req, res) => {
     const filteredOverviewMovies = movies.flat().filter((item) => item.overview?.trim() !== "");
     const filteredOverviewTvShow = tvShow.flat().filter((item) => item.overview?.trim() !== "");
 
+    let filteredMoviesWithProviders = [];
+    let filteredTvShowWithProviders = [];
+
     for (const item of filteredOverviewMovies) {
       const type = "1";
-      const providers = await requestWatchProvides(item.id + type);
+      const providers = await requestWatchProvides(item.id, type);
       if (providers !== undefined) {
         filteredMoviesWithProviders.push(item);
       }
@@ -131,7 +138,7 @@ module.exports = async (req, res) => {
 
     for (const item of filteredOverviewTvShow) {
       const type = "0";
-      const providers = await requestWatchProvides(item.id + type);
+      const providers = await requestWatchProvides(item.id, type);
       if (providers !== undefined) {
         filteredTvShowWithProviders.push(item);
       }
@@ -139,21 +146,24 @@ module.exports = async (req, res) => {
 
     const maxLength = Math.max(filteredMoviesWithProviders.length, filteredTvShowWithProviders.length);
 
+    let result = [];
+
     for (let i = 0; i < maxLength; i++) {
       if (filteredMoviesWithProviders[i]) result.push(filteredMoviesWithProviders[i]);
       if (filteredTvShowWithProviders[i]) result.push(filteredTvShowWithProviders[i]);
     }
 
-    if (trendingChanged(result, trendingCache.data.content)) {
+    if (trendingChanged(result, trendingCache.result)) {
       await saveJson("notificationF2W-T9CgICVM9EaMADOREZ1HnF3qD3olyn.txt", {
         result,
       });
 
-      console.log("Filmes Novos", result);
 
       console.log("Filmes mudaram, enviando notificação...");
 
       const response = await axios.get(urlTokens, { responseType: 'json' });
+
+      console.log(response.data);
 
       await enviarNotificacao(response.data);
       return res.status(200).json({ message: "Notificação Enviada" });
