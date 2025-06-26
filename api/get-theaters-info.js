@@ -22,8 +22,6 @@ module.exports = async (req, res) => {
 
       const $ = cheerio.load(data);
 
-      console.log(data)
-
       const theaters = $("div.theater-card");
 
     const cinemas = [];
@@ -35,8 +33,6 @@ module.exports = async (req, res) => {
 
         const cleaned = code.replace(/ACr/g, "");
         const decoded = Buffer.from(cleaned, "base64").toString("utf-8");
-
-        console.log(decoded)
 
         const match = decoded.match(/cinema-([A-Z0-9]+)/i);
 

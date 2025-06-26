@@ -7,7 +7,7 @@ const expo = new Expo();
 
 const urlMovies = "https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationF2W-T9CgICVM9EaMADOREZ1HnF3qD3olyn.txt";
 
-const urlTokens = `https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationTokens-glUgrqJeVzhYj2bKNbsgFSj6lFDb3l-CySYlhMKotyF8F8uovSxwF1AWgEzYn.txt?nocache=${Date.now()}`;
+const urlTokens = `https://pypt6b6urgwbmcod.public.blob.vercel-storage.com/notificationTokens-lWj9B7MUKtFeyEj5E4Lo6h1dGOTu2l.txt`;
 
 async function saveJson(nomeArquivo, objetoJson) {
   const jsonString = JSON.stringify(objetoJson, null, 2);
@@ -51,7 +51,6 @@ function trendingChanged(novos, antigos) {
 
   for (let i = 0; i < Math.min(novos.length, 3) && i < antigos.length; i++) {
     if (novos[i].id !== antigos[i].id) {
-      console.log(novos[i].id, antigos[i].id);
 
       if ( i % 2 === 0 )
       {
@@ -106,7 +105,8 @@ async function enviarNotificacao(tokens, ContentName) {
 
   const chunks = expo.chunkPushNotifications(messages);
   for (let chunk of chunks) {
-    await expo.sendPushNotificationsAsync(chunk);
+    await expo.sendPushNot
+    ificationsAsync(chunk);
   }
 }
 
@@ -114,8 +114,6 @@ module.exports = async (req, res) => {
   const responseMovies = await axios.get(urlMovies, { responseType: "json" });
 
   const trendingCache = responseMovies.data;
-
-  console.log("AQUI", trendingCache);
 
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -144,25 +142,17 @@ module.exports = async (req, res) => {
 
     const resultChange = trendingChanged(result, trendingCache.result);
 
-    console.log("ResultChange", resultChange);
-
-    if (resultChange[0] || true) {
+    if (resultChange[0]) {
       await saveJson("notificationF2W-T9CgICVM9EaMADOREZ1HnF3qD3olyn.txt", {
         result,
       });
 
-
-      console.log("Filmes mudaram, enviando notificação...");
-
       const response = await axios.get(urlTokens, { responseType: 'json' });
-
-      console.log(response.data);
 
       await enviarNotificacao(response.data, resultChange[1]);
       return res.status(200).json({ message: "Notificação Enviada" });
     }
 
-    console.log("Filmes não mudaram.");
     return res.status(200).json({ message: "Nada mudou." });
   } catch (err) {
     console.error("Erro:", err);
